@@ -1,0 +1,176 @@
+unit Tarea;
+
+interface
+
+uses
+  crt, strtools;
+
+const
+  nom_archivo='datos.txt';
+  max= 50;
+
+type
+  actividad= record
+             titulo: string;
+             fecha: string;
+             hora: string;
+             detalle: string;
+             cont: integer;
+             end;
+
+var
+  arreglo_tarea: array [1..max]of  actividad;
+  archivo: text;
+  cont: integer;
+
+procedure agregar_tarea(var titulo, fecha, hora, detalle:string; var activ: actividad);
+procedure guardar_archivo(var activ: actividad);
+procedure listar_xfecha(fecha:string; var activ: actividad);
+procedure cargar_archivo(var activ: actividad);
+procedure agregado_interno(var titulo, fecha, hora, detalle:string; var activ: actividad);
+procedure eliminar_tarea(var activ: actividad);
+procedure listar_tareas(var activ: actividad);
+
+implementation
+
+var
+   i: Integer;
+
+procedure agregado_interno(var titulo, fecha, hora, detalle:string; var activ: actividad);
+    begin
+       activ.cont+=1;
+       arreglo_tarea[activ.cont].cont:=activ.cont;
+       arreglo_tarea[activ.cont].titulo:=titulo;
+       arreglo_tarea[activ.cont].fecha:=fecha;
+       arreglo_tarea[activ.cont].hora:=hora;
+       arreglo_tarea[activ.cont].detalle:=detalle;
+    end;
+
+procedure agregar_tarea(var titulo, fecha, hora, detalle:string; var activ: actividad);
+   begin
+      activ.cont+=1;
+      arreglo_tarea[activ.cont].cont:=activ.cont;
+      writeln('Ingrese actividad: ');
+      readln(titulo);
+      arreglo_tarea[activ.cont].titulo:=titulo;
+      writeln('Ingrese fecha[dd/mm/aaaa]: ');
+      readln(fecha);
+      arreglo_tarea[activ.cont].fecha:=fecha;
+      writeln('Ingrese hora[hh:mm]: ');
+      readln(hora);
+      arreglo_tarea[activ.cont].hora:=hora;
+      writeln('Ingrese descripcion: ');
+      readln(detalle);
+      arreglo_tarea[activ.cont].detalle:=detalle;
+      guardar_archivo(activ);
+   end;
+
+procedure guardar_archivo(var activ: actividad);
+   begin
+      assign(archivo, nom_archivo);
+      rewrite(archivo);
+      cont:= activ.cont;
+      for i:=1 to cont do
+        begin
+             writeln(archivo, arreglo_tarea[i].titulo,'|',
+                              arreglo_tarea[i].fecha,'|',
+                              arreglo_tarea[i].hora,'|',
+                              arreglo_tarea[i].detalle);
+        end;
+      close(archivo);
+   end;
+
+procedure listar_xfecha(fecha: string; var activ: actividad);
+  var
+     encontrados: integer;
+  begin
+      encontrados:=0;
+      writeln('Ingrese la fecha a tener en cuenta:');
+      readln(fecha);
+      cont:= activ.cont;
+      for i:=1 to cont do
+        begin
+           if(arreglo_tarea[i].fecha = fecha)then
+             begin
+               writeln();
+               writeln('Tarea:', arreglo_tarea[i].titulo);
+               writeln('Hora:', arreglo_tarea[i].hora);
+               writeln('Detalle:', arreglo_tarea[i].detalle);
+               writeln();
+               encontrados+=1;
+             end;
+        end;
+      if encontrados=0 then writeln('No posee tarea(s) para el ', fecha);
+      readkey;
+  end;
+
+{carga los los elementos del archivo a la ectructura para procesar}
+procedure cargar_archivo(var activ: actividad);
+  const
+    titulo=0;
+    fecha=1;
+    hora=2;
+    detalle=3;
+  var
+     partes: TParts;
+     linea: string;
+  begin
+      assign(archivo, nom_archivo);
+      reset(archivo);
+      while not EOF(archivo) do
+      begin
+         Readln(archivo, linea);
+         partes:= StringSplit(linea, '|');
+         agregado_interno(partes[titulo], partes[fecha],partes[hora], partes[detalle], activ);
+      end;
+      close(archivo);
+  end;
+
+procedure listar_tareas(var activ: actividad);
+  begin
+     cont:= activ.cont;
+     writeln('Tarea':20, 'Fecha':15, 'Hora':7, 'OBS':20 );
+     for i:=1 to cont do
+        begin
+          writeln(arreglo_tarea[i].cont,
+                  arreglo_tarea[i].titulo:20,
+                  arreglo_tarea[i].fecha:15,
+                  arreglo_tarea[i].hora:7,
+                  arreglo_tarea[i].detalle:25);
+        end;
+  end;
+
+procedure eliminar_tarea(var activ: actividad);
+var
+   numero:integer;
+   cond: boolean;
+begin
+    cont:= activ.cont;
+    listar_tareas(activ);
+    writeln();
+    writeln('Ingrese numero de tarea a eliminar o ingrese 0 para cancelar: ');
+    readln(numero);
+    cond:= (numero<>0) and (numero<=cont);
+    if cond then
+      begin
+          for i:=1 to cont do
+             begin
+               if(i >=numero) then
+                 arreglo_tarea[i]:=arreglo_tarea[i+1];
+             end;
+          activ.cont-=1;
+          guardar_archivo(activ);
+          writeln();
+          writeln('La tarea ',numero,' se elimino correctamente...');
+          listar_tareas(activ);
+          readkey;
+      end
+    else if (numero<>0) then
+      begin
+          writeln('Entrada incorrecta...');
+          readkey;
+      end;
+end;
+
+end.
+

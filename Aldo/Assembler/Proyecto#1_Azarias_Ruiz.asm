@@ -26,18 +26,19 @@
     telefono_msg    db CR, LF, "Telefono: ", "$"
     correo_msg      db CR, LF, "Correo: ", "$"
     enter           db CR, LF, "$"
-    cabecera        db CR, LF, "#",9d,"Doc.",9d,"Nombre",9d,"Apellido",9d,"Tel.",9d,"Correo",CR,LF,"$"
+    cabecera        db CR, LF, "#",9d,"Doc.",9d,"Nombre",9d,9d,"Apellido",9d,"Tel.",9d,9d,"Correo",CR,LF,"$"
     menu            db CR, LF, "Opciones:", CR, LF, "1. Agregar Contacto", CR, LF, "2. Buscar Contacto", CR, LF, "3. Modificar Contacto", CR, LF, "4. Borrar Contacto", CR, LF, "5. Salir de la agenda", CR, LF, "Selecione una opcion: ","$"
     no_existe       db CR, LF, "No se encontro el contacto", "$"
     eliminar_msg    db CR, LF, "Desea eliminar el contacto? s/n: ", "$"
     eliminado_msg   db CR, LF, "Contacto eliminado...", "$"
     sin_espacio     db CR, LF, "Espacio insuficiente. Ya no puede agregar contactos", "$"
     corto           db CR, LF, "Muy corto, minimo de 6 digitos ", "$"
-    tel_corto       db CR, LF, "Muy corto, minimo de 7 digitos ", "$"
+    tel_corto       db CR, LF, "Muy corto, minimo de 6 digitos ", "$"
+    mail_corto      db CR, LF, "Muy corto, minimo de 10 digitos ", "$"
     doc_registrado  db CR, LF, "Ya se registro ese documento...", "$"
     edit_menu       db CR, LF, "Editar:", CR, LF, "1. Nombre",CR, LF, "2. Apellido", CR, LF, "3. Telefono", CR, LF, "4. Correo", CR, LF, "5. Volver atras", CR, LF, "$"
     editado_msg     db CR, LF, "Contacto editado...", "$"
-    agenda          db 500 dup('$')
+    agenda          db 900 dup('$')
     propietario     db 15 dup('$')
     documento       db 10 dup ('$')
     
@@ -47,7 +48,7 @@
     nro_contacto    db 0            ;contador para la cantidad de contactos
     i               db 0                                                                                                                          
     j               dw 0
-    long            db 0
+    long            db 0            ;contador para la longitud de los campos igresados
     
 .code
 start:
@@ -63,51 +64,42 @@ start:
         call limpiar_pantalla
         call imprimir_grilla
         
-    obtener_campo:
+    obtener_campo:                      ;guarda un secuencia de caracteres desde la posicion DI dentro de la agenda
         call getc
-        mov agenda[DI], al
-        inc DI
-        inc long
-        cmp al, 13d
+        mov agenda[DI], al              ;guarda la entrada del usuario
+        inc DI                          ;prepara la siguiente posicion
+        inc long                        ;incrementa la longitud del campo
+        cmp al, 13d                     ;compara si es enter
         jne obtener_campo
         ret
         
-    obtener_documento3:
+    obtener_documento3:                 ;guarda un campo en la variable documento (para realizar comparaciones)
         call getc
-        mov documento[SI], al
+        mov documento[SI], al           ;guarda la entrada del usuarion en la variable documento
         inc SI
-        inc long
-        cmp al, 13d
+        inc long                        ;incrementa la longitud
+        cmp al, 13d                     ;compara si es enter
         jne obtener_documento3
         ret
-    
-    agregar_contacto:
+                                        
+    agregar_contacto:                   ;agrega un contacto dentro de la agenda
         call limpiar_pantalla   
-        ;mov i, 0d
-        mov dh, nro_contacto
-        ;mov ah, 0d                      ;limpia el registro para la multiplicacion
-        ;mov al, TAM
-        ;mov bl, nro_contacto
-        ;mul bl                          ;al= resultado de la multiplicacion
-        ;mov ah, 0d                      ;limpia el registro para asignar a DI
-        ;mov DI, ax                      ;DI = resultado de la multlicacion 
+        mov dh, nro_contacto 
         mov DI, 0d
         mov j, DI
         mov cx, DI
         evaluar:
-            cmp dh, cantidad
-            jge insuficiente_espacio
-            cmp agenda[DI], '$'
-            je cargar_datos
-            jne siguiente_posicion
+            cmp dh, cantidad            ;compara la cantidad de contactos dentro de la agenda con la especificada al inicio del programa
+            jge insuficiente_espacio    ;muestra el mensaje
+            cmp agenda[DI], '$'         ;significa que no hay en esa posicion
+            je cargar_datos             ;empieza a guardar los datos
+            jne siguiente_posicion      ;si en esa posicion hay algo salta a la siguiente
             siguiente_posicion:
-                add DI, TAM 
+                add DI, TAM             ;salta a la posicion del siguiente contacto
                 mov j, DI
-                ;add cx, TAM
-                ;inc dh
-                jmp evaluar
+                jmp evaluar             ;vuelve a evaluar la posicion de la agenda en DI
                 
-   insuficiente_espacio:
+   insuficiente_espacio:                ;imprime un mensaje que indica que se no hay espacio para almacenar contactos
         mov ax, offset sin_espacio
         call puts
         call pausar
@@ -123,6 +115,11 @@ start:
         mov ax, offset corto
         call puts
         jmp solicitar_doc
+   
+   correo_corto:
+        mov ax, offset mail_corto
+        call puts
+        jmp solicitar_correo
         
    doc_existente:
         mov ax, offset doc_registrado
@@ -130,8 +127,8 @@ start:
         jmp cargar_datos 
    
    cargar_datos:
-        mov bx, j                      ;bx = copia de DI
-        mov cx, j                      ;cx = copia de DI
+        mov bx, j                       ;bx = copia de DI
+        mov cx, j                       ;cx = copia de DI
         solicitar_doc:
             mov long, 0d
             mov DI, cx
@@ -139,21 +136,19 @@ start:
             call puts
             mov SI, 0
             call obtener_documento3
-            ;dec DI
             dec long
-            ;mov agenda[DI], '$'
             dec SI
             mov documento[SI], '$'
             cmp long, 6d
             jl doc_corto
             cmp long, 0d
-            je solicitar_doc             ;vuelve a solicitar
+            je solicitar_doc            ;vuelve a solicitar
             mov cl, 0d
             mov DI, 0d
             mov SI, 0d
-            cmp_uniqueness:
-                mov bh, 0d                      ;limpio registro
-                mov ah, 0d                      ;limpia el registro para la multiplicacion
+            cmp_uniqueness:             ;comprueba que el documento no se haya registrado en la agenda todavia
+                mov bh, 0d              ;limpio registro
+                mov ah, 0d              ;limpio el registro para la multiplicacion
                 mov al, TAM                     
                 mov bl, cl
                 mul bl
@@ -174,19 +169,19 @@ start:
                         jmp comparar2         
                 ret
             
-                saltar_siguiente2:       ;salta a la posicion del documento del siguiente contacto
+                saltar_siguiente2:      ;salta a la posicion del documento del siguiente contacto
                     inc cl
                     cmp cl, cantidad
                     jge guardar_resto 
-                    add DI, TAM        ;salta al siguiente numero de documento
-                    add bx, TAM
+                    add DI, TAM         ;salta al siguiente numero de documento
+                    add bx, TAM         ; copia de DI
                     mov SI, 0           ;reseteo el contador de la variable documento
                     jmp comparar2     
-        guardar_resto:
+        guardar_resto:                  ;guarda los demas datos del contacto
             mov cx, j
             mov bx, j
             mov DI, cx
-            mov SI, 0
+            mov SI, 0                   ;copia los datos de la variable documento a la posicion del documento en la agenda
             copiar_documento:
                 mov cl, documento[SI]
                 mov agenda[DI], cl
@@ -198,65 +193,69 @@ start:
         mov agenda[DI], '$'    
         mov cx, j
         mov bx, j
+        
         ;guarda el nombre
         solicitar_nombre:
-            mov DI, cx
-            add DI, NOMBRE
-            mov bx, DI
+            mov DI, cx                 ;seteo DI a la posicion inicial del contacto
+            add DI, NOMBRE             ;salta a la posicion del nombre
+            mov bx, DI                 ;copia del la posicion
             mov ax, offset nombre_msg
             call puts
             call obtener_campo
             dec DI
-            mov agenda[DI], '$'
-            cmp bx, DI
-            je solicitar_nombre 
+            mov agenda[DI], '$'        ;remplazo el enter por dolar 
+            cmp bx, DI                 ;si DI permanece con el mismo valor antes de guardar el campo
+            je solicitar_nombre        ;se vuelve a solicitar el nombre
         
         ;guarda el apellido
         solicitar_apellido:
-            mov DI, cx
-            add DI, APELLIDO
-            mov bx, DI
+            mov DI, cx                 ;seteo DI a la posicion inicial del contacto
+            add DI, APELLIDO           ;salta a la posicion del apellido
+            mov bx, DI                 ;copia de la posicion
             mov ax, offset apellido_msg
             call puts
             call obtener_campo
             dec DI
-            mov agenda[DI], '$'
-            cmp bx, DI
-            je solicitar_apellido
+            mov agenda[DI], '$'        ;remplazo el enter por dolar
+            cmp bx, DI                 ;si DI permanece con el mismo valor antes de guardar el campo
+            je solicitar_apellido      ;se vuelve a solicitar el apellido
         
-        ;guarda el telefono
-        
+        ;guarda el telefono  
         solicitar_telefono:
-            mov long, 0d
-            mov DI, cx
-            add DI, TELEFONO
-            mov bx, DI
+            mov long, 0d               ;seteo la longitud a 0
+            mov DI, cx                 ;seteo DI a la posicion inicial del contacto
+            add DI, TELEFONO           ;salta a la posicion del telefono
+            mov bx, DI                 ;copia de la poscion
             mov ax, offset telefono_msg
             call puts
-            mov long, 0d
+            mov long, 0d               ;seteo la longitud a 0
             call obtener_campo
             dec DI
             dec long
-            mov agenda[DI], '$'
-            cmp long, 7d
-            jl telefono_corto
-            cmp bx, DI
-            je solicitar_telefono
+            mov agenda[DI], '$'        ;remplazo el enter por dolar
+            cmp long, 6d               ;compara la longitud del campo con 6
+            jl telefono_corto          ;indica que el telefono es corto
+            cmp bx, DI                 ;si DI permanece con el mismo valor antes de guardar el campo
+            je solicitar_telefono      ;se vuelve a solicitar el telefono
         
         ;guarda el correo 
         solicitar_correo:
-            mov DI, cx
-            add DI, CORREO
-            mov bx, DI
+            mov long, 0d               ;seteo la longitud a 0
+            mov DI, cx                 ;seteo DI a la posicion inicial del contacto
+            add DI, CORREO             ;salta a la posicion del correo
+            mov bx, DI                 ;copia de la poscion
             mov ax, offset correo_msg
             call puts
             call obtener_campo
             dec DI
-            mov agenda[DI], '$'
-            cmp bx, DI
-            je solicitar_correo
+            dec long
+            mov agenda[DI], '$'        ;remplazo el enter por dolar
+            cmp long, 10d              ;comparo si longitud con 10
+            jl correo_corto            ;si es menor indica que el correo es corto
+            cmp bx, DI                 ;si DI permanece con el mismo valor antes de guardar el campo
+            je solicitar_correo        ;se vuelve a solicitar el correo
         
-        inc nro_contacto
+        inc nro_contacto            
         dec disponibles
         jmp resumen
         
@@ -264,10 +263,10 @@ start:
         call limpiar_pantalla
         mov ax, offset documento_msg
         call puts
-        mov bh, 0           ;limpio registro
-        mov DI, 0           ;contador para arreglo agenda
-        mov cl, 0           ;contador para la cantidad de contactos
-        mov SI, 0           ;contador para variable documento
+        mov bh, 0                      ;limpio registro
+        mov DI, 0                      ;contador para arreglo agenda
+        mov cl, 0                      ;contador para la cantidad de contactos
+        mov SI, 0                      ;contador para variable documento
         obtener_documento2:
             call getc
             mov documento[DI], al
@@ -298,13 +297,13 @@ start:
                 jmp comparar         
         ret
     
-    saltar_siguiente:       ;salta a la posicion del documento del siguiente contacto
+    saltar_siguiente:                   ;salta a la posicion del documento del siguiente contacto
         inc cl
         cmp cl, cantidad
         jge no_encontrado 
-        add DI, TAM        ;salta al siguiente numero de documento
+        add DI, TAM                     ;salta al siguiente numero de documento
         add bx, TAM
-        mov SI, 0           ;reseteo el contador de la variable documento
+        mov SI, 0                       ;reseteo el contador de la variable documento
         jmp comparar
         
     no_encontrado:
@@ -322,26 +321,29 @@ start:
         ret
                  
     doc_encontrado:
-        mov bh, 0d          ;limpio registro 
+        mov bh, 0d                      ;limpio registro
+         
         ;muestra el nombre
-        
         mov ax, offset nombre_msg
         call puts
         mov DI, bx
         add DI, NOMBRE
         call mostrar_campo
+        
         ;muestra el apellido        
         mov ax, offset apellido_msg
         call puts
         mov DI, bx
         add DI, APELLIDO
-        call mostrar_campo
+        call mostrar_campo  
+        
         ; muestra el telefono    
         mov ax, offset telefono_msg
         call puts 
         mov DI, bx
         add DI, TELEFONO
         call mostrar_campo
+        
         ;muestra el correo    
         mov ax, offset correo_msg
         call puts
@@ -349,16 +351,16 @@ start:
         add DI, CORREO
         call mostrar_campo
             
-        cmp opcion, 4d
-        je confirmar_borrado
+        cmp opcion, 4d                  ;si la opcion ingresada = 4
+        je confirmar_borrado            ;se solicita la confirmacion de borrado
         
         cmp opcion, 3d
-        je campo_a_editar
-        
+        je campo_a_editar               ;si la opcion ingresada = 3
+                                        ;se solicita el campo a editar
         jmp resumen
         
         
-    modificar_contacto:
+    modificar_contacto:                 ;salta a buscar contacto
         jmp buscar_contacto
         ret
         
@@ -381,24 +383,24 @@ start:
         jmp resumen
         
     modificar_nombre:
-        mov bh, 0d          ;limpio registro 
+        mov bh, 0d                      ;limpio registro 
         nombre:
             mov DI, bx
-            add DI, NOMBRE
+            add DI, NOMBRE              ;copia de la posicion
             mov cx, DI
             mov ax, offset nombre_msg
             call puts
             call obtener_campo
             dec DI
             mov agenda[DI], '$'
-            cmp cx, DI
-            je nombre
+            cmp cx, DI                  ;si no se ingreso nada
+            je nombre                   ;vuelve a solicitar el nombre
             jmp edicion_exitosa
             
     modificar_apellido:
-        mov bh, 0d          ;limpio registro 
+        mov bh, 0d                      ;limpio registro 
         apellido:
-            mov DI, bx
+            mov DI, bx                  ;copia de la posicion
             add DI, APELLIDO
             mov cx, DI
             mov ax, offset apellido_msg
@@ -406,38 +408,37 @@ start:
             call obtener_campo
             dec DI
             mov agenda[DI], '$'
-            cmp cx, DI
-            je apellido
+            cmp cx, DI                  ;si no se ingreso nada
+            je apellido                 ;vuelve a solicitar el apellido
             jmp edicion_exitosa
             
         ret
     modificar_telefono:
-        mov bh, 0d          ;limpio registro 
+        mov bh, 0d                      ;limpio registro 
         telefono: 
-            mov long, 0d
-            mov DI, bx
-            add DI, TELEFONO
+            mov long, 0d                ;seteo la longitud a 0
+            mov DI, bx                  
+            add DI, TELEFONO            ;salta a la posicion del telefono
             mov cx, DI
             mov ax, offset telefono_msg
             call puts
             call obtener_campo
             dec DI
             mov agenda[DI], '$'
-            cmp cx, DI
-            je telefono
-            cmp long, 7d
-            jl telefono_corto
+            cmp cx, DI                  ;si no se ingreso nada
+            je telefono                 ;vuelve a solicitar el telefono
+            cmp long, 6d                ;si el telefono es menor a 6
+            jl telefono_corto           ;vuelve a solicitar el telefono
             jmp edicion_exitosa
             
     telefono_corto2:
         mov ax, offset tel_corto
         call puts
-        ;call pausar
         jmp modificar_telefono
         
             
     modificar_correo:
-        mov bh, 0d          ;limpio registro
+        mov bh, 0d                      ;limpio registro
         correo:
             mov DI, bx
             add DI, CORREO
@@ -460,43 +461,42 @@ start:
     borrar_contacto:
         jmp buscar_contacto
         
-    limpiar_campo:
+    limpiar_campo:                      ;setea las posiciones al simbolo dolar
         mov agenda[DI], '$'
         inc DI
         cmp agenda[DI], '$'
         jne limpiar_campo
         ret
         
-    confirmar_borrado:
+    confirmar_borrado:                  ;solicita la confirmacion del usuario
         mov ax, offset enter
         call puts  
         mov ax, offset eliminar_msg 
         call puts
         call getc
-        cmp al, 's'
-        je eliminar
-        cmp al,'n'
-        je resumen
+        cmp al, 's'                     ;compara la entrada con s
+        je eliminar                     ;si es igual elimina el contacto
+        jmp resumen                     ;sino salta al resumen
         ret
         
-    eliminar:
-        mov bh, 0d          ;limpio registro
-        mov DI, bx
-        call limpiar_campo
-        mov DI, bx
-        add DI, NOMBRE
-        call limpiar_campo
-        mov DI, bx
-        add DI, APELLIDO
-        call limpiar_campo
-        mov DI, bx
-        add DI, TELEFONO
-        call limpiar_campo
-        mov DI, bx
-        add DI, CORREO
-        call limpiar_campo
-        dec nro_contacto
-        inc disponibles
+    eliminar:                           ;setea los datos del contacto en simbolo dolar
+        mov bh, 0d                      ;limpio registro
+        mov DI, bx                      ;seteo DI a la posicion inicial del contacto
+        call limpiar_campo              ;limpia el campo
+        mov DI, bx                      ;seteo DI a la posicion inicial del contacto
+        add DI, NOMBRE                  ;salta a la posicion del nombre
+        call limpiar_campo              ;limpia el campo
+        mov DI, bx                      ;seteo DI a la posicion inicial del contacto
+        add DI, APELLIDO                ;salta a la posicion del apellido
+        call limpiar_campo              ;limpia el campo
+        mov DI, bx                      ;seteo DI a la posicion inicial del contacto
+        add DI, TELEFONO                ;salta a la posicion del telefono
+        call limpiar_campo              ;limpia el campo
+        mov DI, bx                      ;seteo DI a la posicion inicial del contacto
+        add DI, CORREO                  ;salta a la posicion del correo
+        call limpiar_campo              ;limpia el campo
+        dec nro_contacto                ;decrementa la cantidad de contactos en la agenda
+        inc disponibles                 ;aumenta la cantidad de contactos disponibles
         mov ax, offset eliminado_msg
         call puts
         call pausar
@@ -506,8 +506,9 @@ start:
         mov ax, offset salir_msg
         call puts
         call getc
-        cmp al, 's'
-        je finish
+        cmp al, 's'                     ;compara la entrada con s
+        je finish                       ;si es igual finaliza el programa
+        jmp imprimir_menu               ;sino imrime el menu
         ret
    
     imprimir_grilla:
@@ -527,6 +528,7 @@ start:
         CALL MOSTRAR_NUM_DOS_DIGITOS
         mov ax, offset cabecera
         call puts
+        
         ;imprime las columnas de la tabla
         mov cl, 0d                      ;contador para las impresiones de cada contacto
         cmp cl, nro_contacto
@@ -544,7 +546,6 @@ start:
         mov bl, cl
         mul bl
         mov DI, ax
-        ;mov ch, al                     ;ch= resultado de la mult. (pos inicial de cada contacto)
         mov bl, al                      ;copia de DI
         aux:
             cmp agenda[DI], '$'
@@ -563,7 +564,7 @@ start:
     imprimir_datos:
     
         ;imprime el numero de contacto
-        mov al, cl    ;al=1
+        mov al, cl
         inc al
         add al, 48d
         call putc
@@ -581,6 +582,7 @@ start:
         call mostrar_campo
         mov al, 9d
         call putc
+        call putc
             
         ;imprime el apellido
         mov DI, bx
@@ -588,12 +590,14 @@ start:
         call mostrar_campo
         mov al, 9d
         call putc
+        call putc
         
         ;imprime el telefono
         mov DI, bx
         add DI, TELEFONO
         call mostrar_campo
         mov al, 9d
+        call putc
         call putc
             
         ;imprime el correo

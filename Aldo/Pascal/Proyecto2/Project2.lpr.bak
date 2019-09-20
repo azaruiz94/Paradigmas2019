@@ -1,0 +1,44 @@
+program Project2;
+uses crt, Tarea, strtools;
+
+var
+  titulo, fecha, hora, detalle: string;
+  activ: actividad;
+  entrada: integer;
+
+
+begin
+  cargar_archivo(activ);
+  repeat
+      clrscr;
+      writeln('Administrador de tareas');
+      writeln('Menu de Opciones');
+      writeln('1- Agregar Tarea');
+      writeln('2- Listar por fecha');
+      writeln('3- Eliminar tarea');
+      writeln('4- Listar');
+      writeln('5- Salir');
+      readln(entrada);
+      clrscr;
+      case entrada of
+          1:
+            begin
+                 agregar_tarea(titulo, fecha, hora, detalle, activ);
+            end;
+          2:
+            begin
+                 listar_xfecha(fecha, activ);
+            end;
+          3:
+            begin
+                 eliminar_tarea(activ);
+            end;
+          4:
+            begin
+                 listar_tareas(activ);
+                 readkey;
+            end;
+      end;
+   until entrada=5;
+end.
+
