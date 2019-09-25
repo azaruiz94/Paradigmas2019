@@ -9,12 +9,13 @@
         <Filename Value="Pruebas.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="42" Y="10"/>
+        <TopLine Value="9"/>
+        <CursorPos X="43" Y="24"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit0>
     </Units>
-    <JumpHistory Count="6" HistoryIndex="5">
+    <JumpHistory Count="9" HistoryIndex="8">
       <Position1>
         <Filename Value="Pruebas.lpr"/>
         <Caret Line="41" Column="11" TopLine="15"/>
@@ -39,6 +40,18 @@
         <Filename Value="Pruebas.lpr"/>
         <Caret Line="10" Column="25"/>
       </Position6>
+      <Position7>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="31" Column="5" TopLine="4"/>
+      </Position7>
+      <Position8>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="2" Column="15"/>
+      </Position8>
+      <Position9>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="22" Column="17" TopLine="9"/>
+      </Position9>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

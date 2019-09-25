@@ -1,24 +1,47 @@
 program Pruebas;
-uses sysutils;
-var
-  title,  title2,
-  underline,
-  line, row1, row2, row3,
-  fmt : string;
-  i : integer;
+{$mode objfpc}
+
+uses
+  {$ifdef unix}
+  cthreads,
+  {$endif}
+  Classes;
+
+type
+  TMyThread = class(TThread)
+    procedure Execute; override;
+  end;
+
+procedure TMyThread.Execute;
 begin
-  fmt := '%-12s';
-  title := format(fmt,['Column 1']) + format(fmt,['Column 2']) ;
-  for i := 1 to 12 do underline := underline + '-';
-  underline := underline + underline ;
-  fmt := '%-12d';
-  line := format(fmt,[15]) + format(fmt,[8]) ;
-  fmt := '%12s';
-  title2 := format(fmt,['Column 1']) + format(fmt,['Column 2']) ;
-  fmt := '%12d';
-  row1 := format(fmt,[15]) + format(fmt,[8]) ;
-  row2 := format(fmt,[1005]) + format(fmt,[809]) ;
-  fmt := '%12.5d';
-  row3 := format(fmt,[1005]) + format(fmt,[809]) ;
+  WriteLn('I am thread with ID ',ThreadID);
+end;
+
+var
+  t1,t2,t3: TThread;
+  var i:integer;
+begin
+  // create all threads in suspended state
+  t1 := TMyThread.Create(true);
+  t1.FreeOnTerminate := true;
+  t2 := TMyThread.Create(true);
+  t2.FreeOnTerminate := true;
+  t3 := TMyThread.Create(true);
+  t3.FreeOnTerminate := true;
+
+  // start them all
+  t1.Start;
+  t2.Start;
+  t3.Start;
+
+  for i:= 1 to 10000 do
+    begin
+      write(i, '+');
+    end;
+
+  // wait for them all to finish before exiting main thread
+  t1.WaitFor;
+  t2.WaitFor;
+  t3.WaitFor;
 end.
 

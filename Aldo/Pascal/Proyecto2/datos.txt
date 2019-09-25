@@ -1,3 +1,3 @@
-Ir al gym|12/02/2019 15:00|bla bla
-Clase de ingles|18/03/2019 14:00|Tengo que llevar mi cuaderno
-Clase de inge|20/09/2019 14:00|Hacer anotaciones
+Clase de inge|20/09/2019 14:00|Hacer anotaciones|FALSE
+Estudiar Paradigmas|20/09/2019 07:00|Hacer la copia del material|TRUE
+Estudiar Distri|20/09/2019 23:21|Hacer la copia|FALSE
