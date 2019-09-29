@@ -32,7 +32,7 @@ procedure listar_tareas(var activ: actividad);
 procedure tareas_del_dia(var activ: actividad);
 function parse_hecho(estado:boolean):string;
 procedure cambiar_estado(var activ: actividad);
-procedure alarma(var activ: actividad);
+procedure ordenarTareas(var activ: actividad);
 
 implementation
 
@@ -255,6 +255,32 @@ begin
       begin
           writeln('Entrada incorrecta...');
       end;
+end;
+
+procedure ordenarTareas(var activ: actividad);
+var
+   tam, j, cmp, min: integer;
+   fecha1, fecha2: TDateTime;
+   aux: actividad;
+begin
+   tam:= activ.cont;
+   for i:=1 to (tam-1) do
+      min:= i;
+      for j:=(i+1) to tam do
+         begin
+           fecha1:=  StrToDateTime(arreglo_tarea[j].fecha);
+           fecha2:=  StrToDateTime(arreglo_tarea[min].fecha);
+           cmp:= CompareDateTime(fecha1, fecha2);  { >0 si fecha1 es menor a fecha2 }
+           if(cmp < 0) then
+             begin
+                 aux:= arreglo_tarea[min];
+                 arreglo_tarea[min]:= arreglo_tarea[j];
+                 arreglo_tarea[j]:= aux;
+             end;
+         end;
+   begin
+
+   end;
 end;
 
 end.

@@ -32,10 +32,13 @@ procedure TMyThread.Execute;
               begin
                  ahora:= FormatDateTime(fmt, Now);
                  cmp:= CompareDateTime(StrToDateTime(arreglo_tarea[i].fecha), StrToDateTime(ahora));
-                 if(cmp = 0) then Writeln('Alarma!!! debe ', arreglo_tarea[i].titulo);
-
+                 if(cmp = 0) then
+                 begin
+                   Writeln('Alarma!!! debe ', arreglo_tarea[i].titulo);
+                   t.Sleep((14000));
+                 end;
               end;
-          t.Sleep((1000*60));
+          t.Sleep((1000));
         end;
   end;
 
@@ -47,10 +50,11 @@ procedure alarma();
 
 begin
   cargar_archivo(activ); {carga el archivo en el arreglo de actividades}
+  ordenarTareas(activ);
   fmt:= 'dddd dd mmmm yyyy hh:nn';
-  alarma();
   repeat
       clrscr;
+      alarma();
       writeln('Administrador de tareas':50);
       writeln('Hoy es ', FormatDateTime(fmt, Now));
       tareas_del_dia(activ);
@@ -67,6 +71,8 @@ begin
           1:
             begin  {agrega una tarea ingresada por el ususario}
                  agregar_tarea(titulo, fecha, detalle, activ);
+                 ordenarTareas(activ);
+                 t.Terminate;
             end;
           2:
             begin {lista las tareas que hayan en una fecha especidicada por el usuario}
@@ -75,6 +81,8 @@ begin
           3:
             begin {elimina un tarea}
                  eliminar_tarea(activ);
+                 ordenarTareas(activ);
+                 t.Terminate;
             end;
           4:
             begin  {lista todas las tareas existentes}

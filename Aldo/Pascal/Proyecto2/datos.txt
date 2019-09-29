@@ -1,3 +1,11 @@
 Clase de inge|20/09/2019 14:00|Hacer anotaciones|FALSE
 Estudiar Paradigmas|20/09/2019 07:00|Hacer la copia del material|TRUE
 Estudiar Distri|20/09/2019 23:21|Hacer la copia|FALSE
+Ir al teatro|28/09/2019 17:57|asdfs|FALSE
+bla bla|28/09/2019 05:00|llevar algo|FALSE
+asdf|28/09/2019 18:02|asdfsad|FALSE
+hola|28/09/2019 18:06|adsfgasf|FALSE
+asdfaasdf|28/09/2019 18:17|asdasd|FALSE
+cocinar|28/09/2019 18:19|sdfsad|FALSE
+asdfasd|28/09/2019 18:28|aadfasd|FALSE
+hola hola|28/09/2019 19:08|sdfsd|FALSE
