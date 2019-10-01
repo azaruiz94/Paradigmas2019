@@ -9,12 +9,12 @@
         <Filename Value="Pruebas.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="42" Y="10"/>
+        <CursorPos X="10" Y="4"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit0>
     </Units>
-    <JumpHistory Count="6" HistoryIndex="5">
+    <JumpHistory Count="18" HistoryIndex="17">
       <Position1>
         <Filename Value="Pruebas.lpr"/>
         <Caret Line="41" Column="11" TopLine="15"/>
@@ -39,6 +39,54 @@
         <Filename Value="Pruebas.lpr"/>
         <Caret Line="10" Column="25"/>
       </Position6>
+      <Position7>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="31" Column="5" TopLine="4"/>
+      </Position7>
+      <Position8>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="2" Column="15"/>
+      </Position8>
+      <Position9>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="22" Column="17" TopLine="9"/>
+      </Position9>
+      <Position10>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="5" Column="22"/>
+      </Position10>
+      <Position11>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="9" Column="24"/>
+      </Position11>
+      <Position12>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="4"/>
+      </Position12>
+      <Position13>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="3" Column="14"/>
+      </Position13>
+      <Position14>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="13" Column="11"/>
+      </Position14>
+      <Position15>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="9" Column="19"/>
+      </Position15>
+      <Position16>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="2" Column="15"/>
+      </Position16>
+      <Position17>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="10" Column="5"/>
+      </Position17>
+      <Position18>
+        <Filename Value="Pruebas.lpr"/>
+        <Caret Line="4" Column="9"/>
+      </Position18>
     </JumpHistory>
   </ProjectSession>
 </CONFIG>

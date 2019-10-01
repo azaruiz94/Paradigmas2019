@@ -3,6 +3,10 @@ unit Tarea;
 interface
 
 uses
+  {$ifdef unix}
+  cthreads,
+  {$endif}
+  Classes,
   crt, strtools, sysutils, DateUtils;
 
 const
@@ -27,7 +31,7 @@ procedure guardar_archivo(var activ: actividad);
 procedure listar_xfecha(fecha:string; var activ: actividad);
 procedure cargar_archivo(var activ: actividad);
 procedure agregado_interno(var titulo, fecha, detalle:string; hecho:boolean; var activ: actividad);
-procedure eliminar_tarea(var activ: actividad);
+procedure eliminar_tarea(var activ: actividad; var t: TThread);
 procedure listar_tareas(var activ: actividad);
 procedure tareas_del_dia(var activ: actividad);
 function parse_hecho(estado:boolean):string;
@@ -52,21 +56,27 @@ procedure agregado_interno(var titulo, fecha, detalle:string; hecho:boolean; var
 
 {Agrega una tarea con los valores ingresados por el usuario}
 procedure agregar_tarea(var titulo, fecha, detalle:string; var activ: actividad);
+var
+   hora: string;
    begin
       activ.cont+=1;
       arreglo_tarea[activ.cont].cont:=activ.cont;
-      writeln('Ingrese actividad: ');
+      writeln('Ingrese actividad:');
       readln(titulo);
       arreglo_tarea[activ.cont].titulo:=titulo;
-      writeln('Ingrese fecha y hora[dd/mm/yyyy hh:mm]: ');
+      writeln('Ingrese la fecha[dd/mm/yyyy]:');
       readln(fecha);
+      fecha:= Concat(fecha,' ');
+      writeln('Ingrese la hora[hh:mm]:');
+      readln(hora);
+      fecha:= Concat(fecha, hora);
       arreglo_tarea[activ.cont].fecha:=fecha;
-      writeln('Ingrese descripcion: ');
+      writeln('Ingrese descripcion:');
       readln(detalle);
       arreglo_tarea[activ.cont].detalle:=detalle;
       arreglo_tarea[activ.cont].hecho:= false;
+      ordenarTareas(activ);
       guardar_archivo(activ);
-
    end;
 
 {guarda todos los elementos del arreglo de actividades separados con el caracter '|'
@@ -92,10 +102,15 @@ procedure listar_xfecha(fecha: string; var activ: actividad);
      encontrados: integer;   {por si encuentra tarea(s)}
      d1, d2: TDateTime;       {d1= entrada del usuario, d2= fecha de la tarea}
      cmp: integer;
+     hora: string;
   begin
       encontrados:=0;
-      writeln('Ingrese la fecha[dd/mm/yyyy hh:mm]:');
+      writeln('Ingrese la fecha[dd/mm/yyyy]:');
       readln(fecha);
+      fecha:= Concat(fecha,' ');
+      writeln('Ingrese la hora[hh:mm]:');
+      readln(hora);
+      fecha:= Concat(fecha, hora);
       d1:= StrToDateTime(fecha);
       cont:= activ.cont;
       for i:=1 to cont do
@@ -138,25 +153,27 @@ procedure cargar_archivo(var activ: actividad);
          agregado_interno(partes[titulo], partes[fecha], partes[detalle], estado, activ);
       end;
       close(archivo);
+      ordenarTareas(activ);
   end;
 
 {Lista todas las tareas existentes}
 procedure listar_tareas(var activ: actividad);
   begin
      cont:= activ.cont;
-     writeln('Tarea':20, 'Fecha':20, 'OBS':20 );
+     writeln('#', 'Tarea':30, 'Fecha y hora ':18, 'Estado':11, 'OBS':40 );
      for i:=1 to cont do
         begin
           writeln(arreglo_tarea[i].cont,
-                  arreglo_tarea[i].titulo:20,
-                  arreglo_tarea[i].fecha:20,
-                  arreglo_tarea[i].detalle:25,
-                  parse_hecho(arreglo_tarea[i].hecho):20);
+                  arreglo_tarea[i].titulo:30,
+                  arreglo_tarea[i].fecha:18,
+                  parse_hecho(arreglo_tarea[i].hecho):11,
+                  arreglo_tarea[i].detalle:40);
+
         end;
   end;
 
 {elimina una tarea que el usuario especifique, }
-procedure eliminar_tarea(var activ: actividad);
+procedure eliminar_tarea(var activ: actividad; var t: TThread);
 var
    numero:integer;
    cond: boolean;
@@ -169,14 +186,16 @@ begin
     cond:= (numero>0) and (numero<=cont);
     if cond then
       begin
+          t.Terminate;
           for i:=numero to cont do
              begin
-
                  arreglo_tarea[i]:= arreglo_tarea[i+1];
                  arreglo_tarea[i].cont:= i;
              end;
           activ.cont-=1;
+          ordenarTareas(activ);
           guardar_archivo(activ);
+          t.Start;
           writeln();
           writeln('La tarea ',numero,' se elimino correctamente...');
           listar_tareas(activ);
@@ -206,15 +225,15 @@ var
           fecha_tarea:= StrToDateTime(arreglo_tarea[i].fecha);
           cmp1:= CompareDateTime(fecha_tarea, principio);     { >0 si la fecha de la tarea es mayor al inicio del dia }
           cmp2:= CompareDateTime(fecha_tarea, fin);           { <0 si la fecha de la tarea es menor al fin del dia }
-          cond:= (cmp1 > 0) and (cmp2 < 0);
+          cond:= (cmp1 > 0) and (cmp2 < 0) and (arreglo_tarea[i].hecho = false);
           if cond then
             begin
                  encontrados+=1;
                  writeln();
                  write(encontrados,
-                 arreglo_tarea[i].titulo:20,
-                 arreglo_tarea[i].fecha:20,
-                 arreglo_tarea[i].detalle:25);
+                 arreglo_tarea[i].titulo:40,
+                 arreglo_tarea[i].fecha:18,
+                 arreglo_tarea[i].detalle:40);
             end;
         end;
      if encontrados=0 then writeln(' Yuhu! No tiene tareas hoy...');
@@ -232,6 +251,7 @@ var
   parse_hecho:= equivalente;
   end;
 
+{cambia el estado de una tarea a hecho/pendiente}
 procedure cambiar_estado(var activ: actividad);
 var
    numero:integer;
@@ -257,30 +277,35 @@ begin
       end;
 end;
 
+{ordena las tareas del arreglo dependiendo de la fecha y hora utilizando
+el algoritmo selection sort}
 procedure ordenarTareas(var activ: actividad);
 var
-   tam, j, cmp, min: integer;
+   tam, j, cmp, min, lugar: integer;
    fecha1, fecha2: TDateTime;
    aux: actividad;
 begin
    tam:= activ.cont;
    for i:=1 to (tam-1) do
-      min:= i;
+     begin
+       min:= i;
       for j:=(i+1) to tam do
          begin
-           fecha1:=  StrToDateTime(arreglo_tarea[j].fecha);
-           fecha2:=  StrToDateTime(arreglo_tarea[min].fecha);
-           cmp:= CompareDateTime(fecha1, fecha2);  { >0 si fecha1 es menor a fecha2 }
+           fecha1:= StrToDateTime(arreglo_tarea[j].fecha);
+           fecha2:= StrToDateTime(arreglo_tarea[min].fecha);
+           cmp:= CompareDateTime(fecha1, fecha2);  { <0 si fecha1 es menor a fecha2 }
            if(cmp < 0) then
              begin
                  aux:= arreglo_tarea[min];
+                 //lugar:= arreglo_tarea[j].cont;
                  arreglo_tarea[min]:= arreglo_tarea[j];
+                 arreglo_tarea[min].cont:=min;
                  arreglo_tarea[j]:= aux;
+                 arreglo_tarea[j].cont:=j;
              end;
          end;
-   begin
 
-   end;
+     end;
 end;
 
 end.
