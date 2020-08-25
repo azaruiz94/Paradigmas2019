@@ -63,7 +63,7 @@ var
       writeln('Ingrese la fecha[dd/mm/yyyy]:');
       readln(fecha);
       fecha:= Concat(fecha,' ');
-      writeln('Ingrese la hora[hh:mm]:');
+      writeln('Ingrese la hora[hh:mm] en formato 24hs:');
       readln(hora);
       fecha:= Concat(fecha, hora);
       arreglo_tarea[activ.cont].fecha:=fecha;
@@ -104,7 +104,7 @@ procedure listar_xfecha(fecha: string; var activ: actividad);
       writeln('Ingrese la fecha[dd/mm/yyyy]:');
       readln(fecha);
       fecha:= Concat(fecha,' ');
-      writeln('Ingrese la hora[hh:mm]:');
+      writeln('Ingrese la hora[hh:mm] en formato 24hs:');
       readln(hora);
       fecha:= Concat(fecha, hora);
       d1:= StrToDateTime(fecha);
@@ -275,7 +275,7 @@ end;
 el algoritmo selection sort}
 procedure ordenarTareas(var activ: actividad);
 var
-   tam, j, cmp, min, lugar: integer;
+   tam, j, cmp, min: integer;
    fecha1, fecha2: TDateTime;
    aux: actividad;
 begin
@@ -291,7 +291,6 @@ begin
            if(cmp < 0) then
              begin
                  aux:= arreglo_tarea[min];
-                 //lugar:= arreglo_tarea[j].cont;
                  arreglo_tarea[min]:= arreglo_tarea[j];
                  arreglo_tarea[min].cont:=min;
                  arreglo_tarea[j]:= aux;

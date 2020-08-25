@@ -1,0 +1,18 @@
+#lang racket
+(require racket/trace)
+;Ejercicio1
+(define (quitar_de_lista palabra lista)
+  (remove* (list palabra) lista))
+
+;Ejercicio2
+(define (buscar-mayor lista)
+         (foldl max 0 (filter number? (flatten lista))))
+
+;Ejercicio3
+(define (rotar sentido lista)
+  (cond[(equal? sentido 'izquierda) (map (lambda (x) (cond[(list? x) (append (cdr x) (list (car x)))])) (append (cdr lista) (list (car lista))))]))
+
+(define (iterar sublista)
+  (append (cdr sublista) (list (car sublista))))
+
+(trace rotar)

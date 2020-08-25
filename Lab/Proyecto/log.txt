@@ -1,0 +1,7 @@
+Log del programa...
+1234: registro no existente en el padron
+123456: Vota en Centro Regional de Encarnación
+12345: registro no existente en el padron
+1234567: registro no existente en el padron
+123456: Vota en Centro Regional de Encarnación
+852147: Vota en Centro Regional de Encarnación

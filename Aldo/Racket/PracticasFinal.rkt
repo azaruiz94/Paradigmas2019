@@ -1,0 +1,144 @@
+#lang racket
+
+(require racket/trace)
+(define (divisores numero)
+  (define (divisores-aux numero contador aux)
+    (cond[(equal? numero aux) (+ 1 contador)]
+         [(equal? 0 (modulo numero aux)) (divisores-aux numero (+ 1 contador) (+ 1 aux))]
+         [else (divisores-aux numero contador (+ 1 aux))]))
+  (divisores-aux numero 0 1))
+
+(define (primos lista)
+  (cond[(empty? lista) cons null]
+       [(equal? 2 (divisores (car lista))) (cons (car lista) (primos (cdr lista)))]
+       [else (primos (cdr lista))]))
+
+(define (pares lista)
+  (cond[(empty? lista) cons null]
+       [(equal? 0 (modulo (car lista) 2)) (cons (car lista) (pares (cdr lista)))]
+       [else (pares (cdr lista))]))
+
+(define (impares lista)
+  (cond[(empty? lista) cons null]
+       [(equal? 0 (modulo (car lista) 2)) (impares (cdr lista))]
+       [else (cons (car lista) (impares (cdr lista)))]))
+
+(define (min lista)
+  (define (min-aux lista minimo)
+    (cond[(empty? lista) minimo]
+         [(< (car lista) minimo) (min-aux (cdr lista) (car lista))]
+         [else (min-aux (cdr lista) minimo)]))
+  (min-aux lista 100))
+
+(define (max lista)
+  (define (max-aux lista maximo)
+    (cond[(empty? lista) maximo]
+         [(> (car lista) maximo) (max-aux (cdr lista) (car lista))]
+         [else (max-aux (cdr lista) maximo)]))
+  (max-aux lista 0))
+
+(define (imprimir-linea n)
+  (cond[(equal? n 0) (printf "")]
+       [else (printf "*") (imprimir-linea (- n 1))]))
+
+(define (triangulo altura)
+  (define (triangulo-aux altura aux)
+    (cond[(equal? aux altura) (printf "")]
+         [ else (imprimir-linea (+ aux 1)) (printf "\n") (triangulo-aux altura (+ aux 1))]))
+  (triangulo-aux altura 0))
+
+(define (triangulo-recto altura)
+  (cond[(equal? 0 altura) (printf "")]
+       [else (imprimir-linea altura) (printf "\n") (triangulo-recto (- altura 1))]))
+
+(define (cuadrado lado)
+  (define (cuadrado-aux lado contador)
+  (cond[(equal? lado contador) (printf "")]
+       [else (imprimir-linea lado) (printf "\n") (cuadrado-aux lado (+ 1 contador))]))
+  (cuadrado-aux lado 0))
+
+(define (lista-cuadrado lista)
+  (cond[(empty? lista) null]
+       [else (cons (* (car lista) (car lista)) (lista-cuadrado (cdr lista)))]))
+
+
+;(obtener-numeros '((1 (2)) a (((5 c 7))) 4))
+;(1 2 5 7 4)
+;(obtener-numeros '((1 2) a (5 c 7) 4))
+;(1 2 5 7 4)
+(define (obtener-numeros lista)
+    (cond[(empty? lista) null]
+         [(list? (car lista)) (mi-append (obtener-numeros (car lista)) (obtener-numeros (cdr lista)))]
+         [(number? (car lista)) (mi-append (list (car lista)) (obtener-numeros (cdr lista)))]
+         [else (obtener-numeros (cdr lista))]))
+
+;(getNumeros '((1 (2)) a (((5 c 7))) 4))
+;((1 (2)) (((5 7))) 4)
+;(getNumeros '((1 2) a (5 c 7) 4))
+;((1 2) (5 7) 4)
+(define (obtenerNumeros lista)
+    (cond[(empty? lista) null]
+         [(list? (car lista)) (cons (obtenerNumeros (car lista)) (obtenerNumeros (cdr lista)))]
+         [(number? (car lista)) (cons (car lista) (obtenerNumeros (cdr lista)))]
+         [else (obtenerNumeros (cdr lista))]))
+
+;(get-numeros '((1 (2)) a (((5 c 7))) 4))
+;(1 2 5 7 4)
+;(get-numeros '((1 2) a (5 c 7) 4))
+;(1 2 5 7 4)
+(define (get-numeros lista)
+  (define (get-numeros-aux lista resultado)
+    (define (aux sublista resultado)
+      (cond[(empty? sublista) (get-numeros-aux (cdr lista) resultado)]
+           [(list? (car sublista)) (aux (car sublista) resultado)]
+           [(symbol? (car sublista)) (aux (cdr sublista) resultado)]
+           [(number? (car sublista)) (aux (cdr sublista) (append resultado (list(car sublista))))]))
+    (cond[(empty? lista) resultado]
+         [(list? (car lista)) (aux (car lista) resultado)]
+         [(number? (car lista)) (get-numeros-aux (cdr lista) (append resultado (list(car lista))))]
+         [else (get-numeros-aux (cdr lista) resultado)]))
+  (get-numeros-aux lista '()))
+
+;(obtenerNumeros '((1 (2)) a (((5 c 7))) 4))
+;((1 (2)) (((5 7))) 4)
+;(obtenerNumeros '((1 2) a (5 c 7) 4))
+;((1 2) (5 7) 4)
+(define (getNumeros lista)
+    (define (iterar sublista)
+      (cond[(empty? sublista) null]
+           [(list? (car sublista)) (cons (iterar (car sublista)) null)]
+           [(number? (car sublista)) (cons (car sublista) (iterar (cdr sublista)))]
+           [else (iterar (cdr sublista))]))
+    (cond[(empty? lista) null]
+         [(list? (car lista)) (cons (iterar (car lista)) (getNumeros (cdr lista)))]
+         [(number? (car lista)) (cons (car lista) (getNumeros (cdr lista)))]
+         [else (getNumeros (cdr lista))]))
+
+;(obtener-simbolos'((1 (2)) a (((5 c 7))) 4))
+;(a c)
+;(obtener-simbolos '((1 2) a (5 c 7) 4))
+;(a c)
+(define (obtener-simbolos lista)
+    (cond[(empty? lista) null]
+         [(list? (car lista)) (mi-append (obtener-simbolos (car lista)) (obtener-simbolos (cdr lista)))]
+         [(symbol? (car lista)) (mi-append (list (car lista)) (obtener-simbolos (cdr lista)))]
+         [else (obtener-simbolos (cdr lista))]))
+
+(define (mi-append lista1 lista2)
+  (cond[(empty? lista1) cons lista2]
+       [else (cons (car lista1) (mi-append (cdr lista1) lista2))]))
+
+(define (aplana lista)
+  (define (get-atomo-aux lista)
+    (cond[(empty? lista) null]
+         [(list? (car lista)) (mi-append (get-atomo-aux (car lista)) (get-atomo-aux (cdr lista)))]
+         [(or (number? (car lista)) (symbol? (car lista))) (mi-append (list (car lista)) (get-atomo-aux (cdr lista)))]))
+  (get-atomo-aux lista))
+
+ (define (invertir lista)
+   (define (invertir-aux lista linvertida)
+    (cond [(null? lista) linvertida]
+          [else (invertir-aux (cdr lista) (cons (car lista) linvertida))]))
+   (trace invertir-aux)
+   (invertir-aux lista '()))
+  

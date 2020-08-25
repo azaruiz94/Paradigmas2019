@@ -26,7 +26,7 @@ procedure TMyThread.Execute;
   begin
      fmt:= 'dd/mm/yyyy hh:nn';
      cont:= activ.cont;
-     while (not Finished)  do
+     while (not Terminated)  do
         begin
           for i:=1 to cont do
               begin
@@ -45,7 +45,7 @@ procedure TMyThread.Execute;
 procedure alarma();
   begin
      t := TMyThread.Create(true);
-     t.FreeOnTerminate:=true;
+     //t.FreeOnTerminate:=true;
      t.Start;
   end;
 

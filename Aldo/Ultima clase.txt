@@ -1,0 +1,40 @@
+Parciales 30%
+Lab	  20%
+Practicos 50%
+	  ----
+Total=	  100%
+Tareas=	   10% Extra
+--------------------------
+PARCIALES
+Parcial#1 * 	0.15
+Parcial#2 * 	0.15
+	    	----
+Total Parciales= 30%
+--------------------------
+PRACTICOS
+Deber#1   * 0.05
+Deber#2   * 0.05
+Deber#3   * 0.05
+Deber#4   * 0.05
+	    ----
+	     20%
+	
+Proy#1    * 0.1
+Proy#2    * 0.1
+Proy#3    * 0.1
+	    ---
+	     30%
+
+Total Practicos= Deberes+proyectos= 50%
+---------------------------
+Para el final= mezcla del parcial 2 con parcial 1(estudiar mucho practico con recursion simple, funciones aplicativas, tipos de recursion,
+caso base(especificamente en prolog), recursion multiple, calculo lambda(reducción y operaciones), practicar mucha recursion en prolog).
+Criterio de evaluacion para ejercicios de recursion:
+- Caso base
+- Lamada recursiva
+- Reduccion del problema
+- Resolucion del problema
+Errores comunes del parcial#1
+- Paso por valor y paso por referencia
+- Puntero de pascal
+- Caracteristicas de los lenguajes(Compilado, interpretado, tipado, etc)

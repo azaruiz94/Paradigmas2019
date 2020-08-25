@@ -1,0 +1,22 @@
+#lang racket
+(require racket/trace)
+;Ejercicio 1
+;(distributiva '(2 4 6) '(x2 y3))
+;(2x2 2y3 4x2 4y3 6x2 6y3)
+
+(define (distributiva lista1 lista2)
+  (define (distributiva-aux lista1 lista2 resultado)
+    (cond[(empty? lista1) resultado]
+       [else (distributiva-aux (cdr lista1) lista2 (append resultado (list (car lista1) (car lista2) (car lista1) (cadr lista2))))]))
+  (distributiva-aux lista1 lista2 '()))
+;Ejercicio 2
+;(MCD 12 8)
+;4
+(define (MCD m n)
+    (cond[(< m n) 0]
+         [(= (modulo m n) 0) n]
+         [else (MCD n (modulo m n))]))
+
+;Ejercicio 3
+;(my-sort '(5 9 3 6 24))
+;(3 5 6 9 24)

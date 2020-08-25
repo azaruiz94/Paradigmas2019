@@ -1,7 +1,10 @@
-setgsrgt|23/03/2019 14:00|hjghgi|FALSE
-setgsrgt|23/03/2019 14:00|hjghgi|FALSE
-setgsrgt|23/03/2019 14:00|hjghgi|FALSE
-setgsrgt|23/03/2019 14:00|hjghgi|FALSE
-setgsrgt|23/03/2019 14:00|hjghgi|FALSE
-setgsrgt|30/09/2019 23:30|hjghgi|FALSE
-aaads|30/09/2019 23:32|jhffxf|FALSE
+Ir al gym|01/01/2019 14:00|Llevar agua|FALSE
+Hacer tarea de paradigmas|06/03/2019 16:00|Hacer copia del material|FALSE
+Estudiar ingles|15/06/2019 18:00|Comprar libro|TRUE
+Ir al teatro|07/07/2019 20:00|Invitar a mi amiga|FALSE
+Visita al dentista|10/08/2019 08:00|llegar 5 minutos antes|FALSE
+Reunion con amigos|13/09/2019 20:30|Colaborar para la cena|TRUE
+Ir al medico|01/10/2019 02:24|Reservar turno|TRUE
+Cocinar|01/10/2019 14:30|comprar verduras|FALSE
+Ir a la facultad|01/10/2019 16:00|Llevar cuadernos|FALSE
+Clase de pintura|10/12/2019 18:00|Comprar pincel|FALSE

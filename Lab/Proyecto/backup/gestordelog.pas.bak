@@ -1,0 +1,32 @@
+unit gestordelog;
+
+{$mode objfpc}{$H+}
+
+interface
+const
+  logFile = 'E:\Paradigmas 2019\Lab\Proyecto\log.txt';
+uses
+  Classes, SysUtils;
+
+var
+  ptr_archivo: text;
+
+procedure agregarLog(ci, lugar: String);
+
+implementation
+
+procedure agregarLog(ci, lugar: String);
+
+begin
+  Assign (f, logFile);
+  Rewrite (f);            { file is opened for write, and emptied }
+  Writeln (F,'This is the first line of text.txt');
+  close (f);
+  Append(f);              { file is opened for write, but NOT emptied.
+                            any text written to it is appended.}
+  Writeln (f,'This is the second line of text.txt');
+  close (f);
+end;
+
+end.
+

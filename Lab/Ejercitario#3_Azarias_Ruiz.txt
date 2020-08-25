@@ -1,0 +1,189 @@
+; Ejercicio1.asm:
+.model small
+.stack 100h 
+.code
+start:
+    mov ah, 1h
+	int 21h
+    mov cl, al 
+    mov dl, cl
+    mov ah, 2h
+	int 21h 
+    mov ax, 4c00h       ;retorna a ms-dos
+	int 21h
+end start
+
+
+; Ejercicio2.asm:
+.model small
+.stack 100h 
+.code
+start:
+	mov cl, 5 
+	mov ch, 3
+	add cl, ch
+	mov dl, cl
+	add dl, 48d
+	mov ah, 2h
+	int 21h
+	mov ax, 4c00h       ;retorna a ms-dos
+	int 21h 
+end start
+
+
+; Ejercicio3.asm:
+.model small
+.stack 100h 
+.code
+
+start:
+	mov ah, 1h
+    int 21h
+	mov cl, al
+	mov dl, cl
+	mov ah, 2h
+	int 21h
+	mov ax, 4c00h
+	int 21h	
+end start
+
+
+; Ejercicio4.asm:
+.model small
+.stack 100h 
+.code
+start:
+	mov ah, 1h
+    int 21h
+	mov cl, al
+	sub cl, 48d
+	mov ah, 1h
+    int 21h
+	mov ch, al
+	sub ch, 48d
+	add cl, ch
+	add cl, 48d
+	mov dl, cl
+	mov ah, 2h
+	int 21h
+	mov ax, 4c00h
+	int 21h
+end start
+
+; Ejercicio5.asm:
+.model small
+.stack 100h
+.data
+    CR equ 10d
+    LF equ 13d
+    msg db "Ingrese un numero: ", '$'
+    result db CR, LF, "El resultado de la suma es: ", '$' 
+    enter db CR, LF, '$'
+.code
+start:
+    mov ax, @data 
+	mov ds, ax
+	mov dx, offset msg
+	call puts
+	call getc 
+	mov cl, al
+	sub cl, 48d 
+	mov dx, offset enter
+	call puts
+	mov dx, offset msg
+	call puts
+	call getc
+	mov ch, al
+	sub ch, 48d
+	add cl, ch
+	add cl, 48d
+	mov dx, offset result
+	call puts
+	mov dl, cl
+	call putc
+	mov ax, 4c00h       ;retorna a ms-dos
+	int 21h
+    getc:                   ;guarda el caracter dentro de al
+        mov ah, 1h
+	   	int 21h
+	    ret 
+	putc:                   ;muestra el caracter en dl
+		mov ah, 2h
+		int 21h
+		ret		
+    puts: 
+        mov ah, 9h
+        int 21h
+        ret	
+end start
+
+; Ejercicio6.asm:
+.model small
+.stack 100h
+.data
+    CR equ 10d
+    LF equ 13d
+    msg db "Ingrese un numero: ", '$'
+    result db "El resultado de la suma es: ", '$'
+    enter db CR, LF, '$'
+.code
+start:
+    mov ax, @data 
+	mov ds, ax
+	mov dx, offset msg
+	call puts
+	call getc 
+	mov cl, al
+	sub cl, 48d 
+	mov dx, offset enter
+	call puts
+	mov dx, offset msg
+	call puts
+	call getc
+	mov ch, al
+	sub ch, 48d
+	add cl, ch
+	add cl, 48d
+	mov dx, offset enter
+	call puts
+	mov dx, offset result
+	call puts
+	mov dl, cl
+	call putc
+	mov dx, offset enter
+	call puts
+	call puts
+	call start
+    getc:                   ;guarda el caracter dentro de al
+        mov ah, 1h
+	   	int 21h
+	    ret 
+	putc:                   ;muestra el caracter en dl
+		mov ah, 2h
+		int 21h
+		ret		
+    puts: 
+        mov ah, 9h
+        int 21h
+        ret	
+end start
+
+
+; Ejercicio7.asm:
+.model small
+.stack 100h
+.data
+    msg db "Se ha producido un error!! ",'$'
+.code
+start:
+    mov ax, @data 
+	mov ds, ax
+	mov dx, offset msg
+	mov ah, 9h	        ;dx contiene la direccion del string
+	int 21h
+	mov dl, 7
+	mov ah, 2h
+    int 21h
+	mov ax, 4c00h       ;retorna a ms-dos
+	int 21h	
+end start

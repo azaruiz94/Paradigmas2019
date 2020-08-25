@@ -1,0 +1,81 @@
+#lang racket
+(require racket/trace)
+;(factorial 5)
+;120
+(define (factorial numero) 
+  (cond [(eq? numero 0 ) 1]
+        [else (* numero (factorial (- numero 1)))]))
+
+;(suma-de-cuadrados '(1 2 3))
+;14
+(define (suma-de-cuadrados lista)
+  (cond[(empty? lista) 0]
+       [else (+ (* (car lista)(car lista)) (suma-de-cuadrados (cdr lista)))]))
+(trace suma-de-cuadrados)
+
+;(penultimo '(1 2 3 4 f 8))
+;f
+(define (penultimo lista)
+  (penultimo-aux lista 0))
+(define (penultimo-aux lista indice) 
+  (cond [(empty? (cddr lista)) (car lista)]
+        [else (penultimo-aux (cdr lista) (+ indice 1))]))
+
+;(agregar-a-lista (list 1 2 3) 4) 
+;(1 2 3 4)
+(define (agregar-a-lista lista numero)
+  (cond [(empty? (cdr lista)) (cons (car lista) (cons numero null))]
+        [else (cons (car lista) (agregar-a-lista (cdr lista) numero))]))
+
+;(contar-palabra 'hola '(hola como estas? hola todo bien)) 
+;2
+(define (contar-palabra palabra lista)
+  (cond [(empty? lista) 0]
+        [(equal? (car lista) palabra) (+ 1 (contar-palabra palabra (cdr lista)))]
+        [else (contar-palabra palabra (cdr lista))]))
+
+;(resta-listas '(1 2 3 4) '(2 3))
+;(1 4)
+(define (resta-listas lista1 lista2)
+  (cond[(empty? lista1) null]
+       [(not(buscar (car lista1) lista2)) (cons (car lista1) (resta-listas (cdr lista1) lista2))]
+       [else (resta-listas (cdr lista1) lista2)]))
+
+;(buscar 2 '(1 2 3 4))
+(define (buscar elemento lista)
+  (cond[(empty? lista) #f]
+       [(equal? elemento (car lista)) #t]
+       [else (buscar elemento (cdr lista))]))
+
+;(censurar 'mal 'bien '(hola mal me siento hoy)) 
+;(hola bien me siento hoy)
+(define (censurar incorrecto correcto lista) 
+  (cond [(empty? lista) null]
+        [(equal? incorrecto (car lista)) (cons correcto (censurar incorrecto correcto (cdr lista)))]
+        [else (cons (car lista) (censurar incorrecto correcto (cdr lista)))]))
+
+;(alternar '(1 2 3 4 5 6) '( 7 8 9 a b)) 
+;((1 7) (2 8) (3 9) (4 a) (5 b) (6)) ; alternar hasta donde existan elementos.
+(define (alternar lista1 lista2)
+  (cond [(and (empty? lista1) (empty? lista2)) null]
+        [(empty? lista1) (cons lista2 '())]
+        [(empty? lista2) (cons lista1 '())]
+        [else (cons (list (car lista1) (car lista2)) (alternar (cdr lista1) (cdr lista2)))]))
+
+;(partir 5 '(1 2 3 4 5 6 7 8 9))
+;((1 2 3 4 5)(6 7 8 9))
+;(list (list 1 2 3 4 5) (list 6 7 8 9))
+;(cons (list 1 2 3 4 5) (cons (list 6 7 8 9) null))
+(define (partir numero lista)
+  (cond [(empty? lista) null]
+        [(equal? numero (car lista)) (cons (car lista) (list(partir numero (cdr lista))))]
+        [else (cons (car lista) (partir numero (cdr lista)))]))
+;(trace partir)
+
+;(invertir '(1 2 3 4 5 6)) 
+;(6 5 4 3 2 1)
+(define (invertir lista) 
+   (invertir-aux lista null))
+(define (invertir-aux lista linvertida)
+    (cond[(null? lista) linvertida]
+         [else (invertir-aux (cdr lista) (cons (car lista) linvertida))]))

@@ -8,10 +8,8 @@
       <Unit0>
         <Filename Value="Project2.lpr"/>
         <IsPartOfProject Value="True"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="17"/>
-        <CursorPos X="17" Y="29"/>
-        <UsageCount Value="156"/>
+        <CursorPos Y="103"/>
+        <UsageCount Value="191"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -19,20 +17,19 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="Tarea"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="279"/>
-        <CursorPos X="46" Y="172"/>
-        <UsageCount Value="153"/>
+        <TopLine Value="120"/>
+        <CursorPos X="24" Y="35"/>
+        <UsageCount Value="188"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="strtools.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="StrTools"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="83"/>
         <CursorPos X="33" Y="21"/>
-        <UsageCount Value="141"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="176"/>
       </Unit2>
       <Unit3>
         <Filename Value="pruebas.pas"/>
@@ -40,150 +37,152 @@
         <UnitName Value="Pruebas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="10" Y="4"/>
-        <UsageCount Value="93"/>
+        <UsageCount Value="128"/>
       </Unit3>
       <Unit4>
         <Filename Value="Project2.pas"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="7"/>
         <Bookmarks Count="1">
           <Item0 X="6" Y="13" ID="8"/>
         </Bookmarks>
       </Unit4>
       <Unit5>
-        <Filename Value="datetime.pas"/>
-        <UnitName Value="DateTime"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="34" Y="18"/>
-        <UsageCount Value="2"/>
-      </Unit5>
-      <Unit6>
         <Filename Value="..\Pruebas.lpr"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="11" Y="6"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="6"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="..\Ejercicio parcial 2019\Project1.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="4"/>
+        <CursorPos X="44" Y="18"/>
+        <UsageCount Value="24"/>
+        <Loaded Value="True"/>
       </Unit6>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="tarea.pas"/>
-        <Caret Line="9" Column="11"/>
-      </Position1>
-      <Position2>
-        <Filename Value="tarea.pas"/>
-        <Caret Line="41" Column="48" TopLine="29"/>
-      </Position2>
-      <Position3>
         <Filename Value="Project2.lpr"/>
         <Caret Line="13" Column="22"/>
+      </Position1>
+      <Position2>
+        <Filename Value="Project2.lpr"/>
+        <Caret Line="40" Column="23" TopLine="16"/>
+      </Position2>
+      <Position3>
+        <Filename Value="tarea.pas"/>
+        <Caret Line="35" Column="48" TopLine="23"/>
       </Position3>
       <Position4>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="40" Column="23" TopLine="16"/>
+        <Caret Line="34" Column="67" TopLine="27"/>
       </Position4>
       <Position5>
         <Filename Value="tarea.pas"/>
-        <Caret Line="35" Column="48" TopLine="23"/>
+        <Caret Line="293" Column="37" TopLine="243"/>
       </Position5>
       <Position6>
-        <Filename Value="Project2.lpr"/>
-        <Caret Line="34" Column="67" TopLine="27"/>
+        <Filename Value="tarea.pas"/>
+        <Caret Line="296" Column="35" TopLine="280"/>
       </Position6>
       <Position7>
         <Filename Value="tarea.pas"/>
-        <Caret Line="293" Column="37" TopLine="243"/>
+        <Caret Line="26" Column="29" TopLine="17"/>
       </Position7>
       <Position8>
         <Filename Value="tarea.pas"/>
-        <Caret Line="296" Column="35" TopLine="280"/>
+        <Caret Line="35" TopLine="9"/>
       </Position8>
       <Position9>
         <Filename Value="tarea.pas"/>
-        <Caret Line="26" Column="29" TopLine="17"/>
+        <Caret Line="278" Column="45" TopLine="91"/>
       </Position9>
       <Position10>
         <Filename Value="tarea.pas"/>
-        <Caret Line="35" TopLine="9"/>
+        <Caret Line="279" TopLine="265"/>
       </Position10>
       <Position11>
         <Filename Value="tarea.pas"/>
-        <Caret Line="278" Column="45" TopLine="91"/>
+        <Caret Line="157" Column="44" TopLine="147"/>
       </Position11>
       <Position12>
-        <Filename Value="strtools.pas"/>
-        <Caret Line="21" Column="33" TopLine="83"/>
+        <Filename Value="tarea.pas"/>
+        <Caret Line="151" Column="21" TopLine="132"/>
       </Position12>
       <Position13>
         <Filename Value="tarea.pas"/>
-        <Caret Line="279" TopLine="265"/>
+        <Caret Line="289" Column="20" TopLine="279"/>
       </Position13>
       <Position14>
         <Filename Value="tarea.pas"/>
-        <Caret Line="157" Column="44" TopLine="147"/>
+        <Caret Line="290" Column="89" TopLine="274"/>
       </Position14>
       <Position15>
         <Filename Value="tarea.pas"/>
-        <Caret Line="151" Column="21" TopLine="132"/>
+        <Caret Line="285" Column="18" TopLine="279"/>
       </Position15>
       <Position16>
         <Filename Value="tarea.pas"/>
-        <Caret Line="289" Column="20" TopLine="279"/>
+        <Caret Line="299" Column="42" TopLine="278"/>
       </Position16>
       <Position17>
-        <Filename Value="tarea.pas"/>
-        <Caret Line="290" Column="89" TopLine="274"/>
+        <Filename Value="Project2.lpr"/>
+        <Caret Line="96" Column="27" TopLine="71"/>
       </Position17>
       <Position18>
         <Filename Value="tarea.pas"/>
-        <Caret Line="285" Column="18" TopLine="279"/>
+        <Caret Line="183" Column="10" TopLine="169"/>
       </Position18>
       <Position19>
         <Filename Value="tarea.pas"/>
-        <Caret Line="299" Column="42" TopLine="278"/>
+        <Caret Line="172" Column="55" TopLine="158"/>
       </Position19>
       <Position20>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="96" Column="27" TopLine="71"/>
+        <Caret Line="83" Column="41" TopLine="58"/>
       </Position20>
       <Position21>
-        <Filename Value="tarea.pas"/>
-        <Caret Line="183" Column="10" TopLine="169"/>
+        <Filename Value="Project2.lpr"/>
+        <Caret Line="41" Column="26" TopLine="27"/>
       </Position21>
       <Position22>
-        <Filename Value="tarea.pas"/>
-        <Caret Line="172" Column="55" TopLine="158"/>
+        <Filename Value="Project2.lpr"/>
+        <Caret Line="83" Column="38" TopLine="70"/>
       </Position22>
       <Position23>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="83" Column="41" TopLine="58"/>
+        <Caret Line="41" Column="23" TopLine="29"/>
       </Position23>
       <Position24>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="41" Column="26" TopLine="27"/>
+        <Caret Line="94" Column="29" TopLine="48"/>
       </Position24>
       <Position25>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="83" Column="38" TopLine="70"/>
+        <Caret Line="49" Column="29" TopLine="48"/>
       </Position25>
       <Position26>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="41" Column="23" TopLine="29"/>
+        <Caret Line="74" Column="30" TopLine="62"/>
       </Position26>
       <Position27>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="94" Column="29" TopLine="48"/>
+        <Caret Line="49" Column="14" TopLine="40"/>
       </Position27>
       <Position28>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="49" Column="29" TopLine="48"/>
+        <Caret Line="29" Column="17" TopLine="17"/>
       </Position28>
       <Position29>
         <Filename Value="Project2.lpr"/>
-        <Caret Line="74" Column="30" TopLine="62"/>
+        <Caret Line="79" Column="17" TopLine="76"/>
       </Position29>
       <Position30>
-        <Filename Value="Project2.lpr"/>
-        <Caret Line="49" Column="14" TopLine="40"/>
+        <Filename Value="tarea.pas"/>
+        <Caret Line="261" Column="34" TopLine="249"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
